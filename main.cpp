@@ -127,7 +127,16 @@ int main(int argc, char **argv) {
     P.resize(q.rows(),q.rows());
     P.setIdentity();
     fixed_point_constraints(P, q.rows(), fixed_point_indices);
-    
+
+    if(M.rows() == 0) {
+        std::cout<<"mass_matrix_particles not implmented ... exiting \n";
+        exit(0);
+    }
+
+    if(P.rows() == 0) {
+        std::cout<<"fixed_point_constraints not implemented ... exiting  \n";
+    }
+
     x0 = q - P.transpose()*P*q; //vector x0 contains position of all fixed nodes, zero for everything else
     
     //correct M, q and qdot so they are the right size
