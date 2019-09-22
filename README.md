@@ -112,6 +112,15 @@ The goal of this assignment is to take what you've learned about 1D mass-spring 
 
 **Github does not render the math in this Markdown. Please look at README.html to see the equations in their proper form**
 
+### A Spring and Two Masses in 3D
+
+### Mass-Spring Systems  in 3D
+
+### Linearly-Implicit Time Integration
+
+### Fixed Displacement Boundary Conditions
+
+
 ### Groundrules
 
 Implementations of nearly any task you're asked to implemented in this course can be found online. Do not copy these and avoid googling for code; instead, search the internet for explanations. Many topics have relevant wikipedia articles. Use these as references. Always remember to cite any references in your comments.
