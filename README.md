@@ -111,3 +111,60 @@ The goal of this assignment is to take what you've learned about 1D mass-spring 
 
 
 **Github does not render the math in this Markdown. Please look at README.html to see the equations in their proper form**
+
+### Groundrules
+
+Implementations of nearly any task you're asked to implemented in this course can be found online. Do not copy these and avoid googling for code; instead, search the internet for explanations. Many topics have relevant wikipedia articles. Use these as references. Always remember to cite any references in your comments.
+
+### Implementation Notes
+
+For this course most functions will be implemented in **.cpp** files. In this assignment the only exception is that time integrators are implemented in **.h** files. This is due to the use of lambda functions to pass force data to the time integration algorithms.
+
+### src/T_particle.cpp 
+
+Compute the kinetic energy of a single mass particle.
+
+### src/V_gravity_particle.cpp
+
+Compute the gravitational potental energy of a single mass particle.
+
+### src/V_spring_particle_particle.cpp
+
+Compute the potential energy of a spring which connects two particles. 
+
+### src/dV_gravity_particle_dq.cpp
+
+Compute the gradient of the gravitational potential energy for a single particle.
+
+### src/dV_spring_particle_particle_dq.cpp
+
+Compute the forces exerted by a single spring on its end-points.
+ 
+### src/d2V_spring_particle_particle_dq2.cpp
+
+Compute the per-spring hessian of the spring potential energy. 
+
+### src/mass_matrix_paricles.cpp
+
+Compute the sparse, diagonal mass matrix that stores the mass of each particle in the mass-spring on its diagonal.
+
+### src/assemble_forces.cpp
+
+Iterate through each spring in the mesh, compute the per-spring forces and assemble the global force vector.
+
+### src/assemble_stiffness.cpp
+
+Iterate through each spring in the mesh, compute the per-spring stiffness matrix and assemble the global, sparse stiffness matrix. To do this, you should construct a list of ``Eigen::Triplet`` objects and then set your sparse matrix using these [triplets](https://eigen.tuxfamily.org/dox/group__TutorialSparse.html).
+
+### src/fixed_point_constraints.cpp
+
+Compute the sparse projection matrix which projects out fixed point vertices. 
+
+### src/pick_nearest_vertices.cpp
+
+Given a point on the screen (i.e a mouse position clicked by the user), find all vertices within a given radius. **For this method, and this method alone** you are allowed to use the ``igl::unproject`` and ``igl::ray_mesh_intersect`` functions. I have provided the approriate ray shooting function for you to use in the code as well. 
+
+### include/linear_implicit_euler.h
+
+Implement the linearly implicit Euler time integrator. 
+
