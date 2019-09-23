@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>README</title>
+  <style>
+    .markdown-body {
+        box-sizing: border-box;
+        min-width: 200px;
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 45px;
+    }
+
+    @media (max-width: 767px) {
+        .markdown-body {
+            padding: 15px;
+        }
+    }
+</style>
+  <link rel="stylesheet" href="css/github-markdown.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<article class="markdown-body">
+<h1 id="physics-based-animation-mass-spring-systems-on-three-dimensions">Physics-Based Animation – Mass-Spring Systems on Three Dimensions</h1>
+<blockquote>
+<p><strong>To get started:</strong> Clone this repository and all its <a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules">submodule</a> dependencies using:</p>
+<pre><code>git clone --recursive https://github.com/dilevin/CSC2549-a2-mass-spring-3d.git</code></pre>
+</blockquote>
+<p><strong>Do not fork:</strong> Clicking “Fork” will create a <em>public</em> repository. If you’d like to use GitHub while you work on your assignment, then mirror this repo as a new <em>private</em> repository: https://stackoverflow.com/questions/10065526/github-how-to-make-a-fork-of-public-repository-private</p>
+<h2 id="introduction">Introduction</h2>
+<p>Welcome to Physics-Based Animation. This assignment has two purposes, (1) to familiarize you with the development tools used for assignments in the course and (2) to introduce you to some basic physics simulation concepts in one-dimension (1D).</p>
+<h3 id="prerequisite-installation">Prerequisite installation</h3>
+<p>On all platforms, we will assume you have installed cmake and a modern c++ compiler on Mac OS X<a href="#¹macusers">¹</a>, Linux<a href="#²linuxusers">²</a>, or Windows<a href="#³windowsusers">³</a>.</p>
+<p>We also assume that you have cloned this repository using the <code>--recursive</code> flag (if not then issue <code>git submodule update --init --recursive</code>).</p>
+<p><strong>Note:</strong> We only officially support these assignments on Ubuntu Linux 18.04 (the OS the teaching labs are running) and OSX 10.13 (the OS I use on my personal laptop). While they <em>should</em> work on other operating systems, we make no guarantees.</p>
+<p><strong>All grading of assignments is done on Linux 18.04</strong></p>
+<h3 id="layout">Layout</h3>
+<p>All assignments will have a similar directory and file layout:</p>
+<pre><code>README.md
+CMakeLists.txt
+main.cpp
+include/
+  function1.h
+  function2.h
+  ...
+src/
+  function1.cpp
+  function2.cpp
+  ...
+data/
+  ...
+...</code></pre>
+<p>The <code>README.md</code> file will describe the background, contents and tasks of the assignment.</p>
+<p>The <code>CMakeLists.txt</code> file setups up the cmake build routine for this assignment.</p>
+<p>The <code>main.cpp</code> file will include the headers in the <code>include/</code> directory and link to the functions compiled in the <code>src/</code> directory. This file contains the <code>main</code> function that is executed when the program is run from the command line.</p>
+<p>The <code>include/</code> directory contains one file for each function that you will implement as part of the assignment.</p>
+<p>The <code>src/</code> directory contains <em>empty implementations</em> of the functions specified in the <code>include/</code> directory. This is where you will implement the parts of the assignment.</p>
+<p>The <code>data/</code> directory contains <em>sample</em> input data for your program. Keep in mind you should create your own test data to verify your program as you write it. It is not necessarily sufficient that your program <em>only</em> works on the given sample data.</p>
+<h2 id="compilation-for-debugging">Compilation for Debugging</h2>
+<p>This and all following assignments will follow a typical cmake/make build routine. Starting in this directory, issue:</p>
+<pre><code>mkdir build
+cd build
+cmake ..</code></pre>
+<p>If you are using Mac or Linux, then issue:</p>
+<pre><code>make</code></pre>
+<h2 id="compliation-for-testing">Compliation for Testing</h2>
+<p>Compiling the code in the above manner will yield working, but very slow executables. To run the code at full speed, you should compile it in release mode. Starting in the <strong>build directory</strong>, do the following:</p>
+<pre><code>cmake .. -DCMAKE_BUILD_TYPE=Release</code></pre>
+<p>Followed by:</p>
+<pre><code>make </code></pre>
+<p>Your code should now run signfigantly (sometimes as much as ten times) faster.</p>
+<p>If you are using Windows, then running <code>cmake ..</code> should have created a Visual Studio solution file called <code>a1-mass-spring-1d.sln</code> that you can open and build from there. Building the project will generate an .exe file.</p>
+<p>Why don’t you try this right now?</p>
+<h2 id="execution">Execution</h2>
+<p>Once built, you can execute the assignment from inside the <code>build/</code> using</p>
+<pre><code>./a2-mass-spring-3d</code></pre>
+<h2 id="background">Background</h2>
+<p>Its happening! We are finally doing some computer graphics ! You can tell because this assignment has a bunny in it (their name is Terry).</p>
+<p>The goal of this assignment is to take what you’ve learned about 1D mass-spring systems and move it to 3D. While much of what we previously covered on variational mechanics and time integration still applies, you will soon see that implementations in 3D become much more complicated. Crucially, this assignment will tackle three concepts which will be important for the remainder of the course</p>
+<ol type="1">
+<li>the potential energy of a 3D, non-zero rest length spring<br />
+</li>
+<li>the notion of assembly. Assembly is a process which builds global linear algebra operations describing the motion of a whole object (bunny) from smaller operators describing the behaviour of individual pieces (in this case springs).</li>
+<li>The linearly implicit time integrator in 3D – arguably the most popular time integration scheme in computer graphics.</li>
+</ol>
+<figure>
+<img src="images/a2_results.gif" alt="" /><figcaption>Poking and prodding Terry the Bunny</figcaption>
+</figure>
+<p><strong>Github does not render the math in this Markdown. Please look at README.html to see the equations in their proper form</strong></p>
+<h3 id="a-spring-and-two-masses-in-3d">A Spring and Two Masses in 3D</h3>
+<p>The <a href="https://github.com/dilevin/CSC2549-a1-mass-spring-1d">previous assignment</a> had you implement a simple simulation of a coupled mass and spring in one-dimension. In this assignment we are going to level that up to three dimensions. Specifically, the asignment 2 code reads in a a 3D <em>tetrahedral</em> mesh (created using <a href="https://github.com/Yixin-Hu/TetWild">TetWild</a>) and interprets all the edges of this tetrahedral mesh as springs. The user (you!!) will be able to poke and prod this bunny by clicking on vertices, in order to elicit, springy wobbly motion.</p>
+<p>In 1D, we used the one-dimensional position of the mass particle as our generalized coordinate. In 3D we will use the obvious extension, which is that the genearlized coordinate of each mass particle will be its 3D position. For the simple case of a spring connecting two masses we will define the <span class="math inline">\(6\times 1\)</span> vector</p>
+<p><span class="math display">\[ \mathbf{q} = \begin{bmatrix} x_0\\y_0\\z_0\\x_1\\y_1\\z_1 \end{bmatrix},\]</span></p>
+<p>where subscripts are used to denote the particle each variable is associated with. Analagous with the 1D case, <span class="math inline">\(\dot{\mathbf{q}} = \frac{d\mathbf{q}}{dt}\)</span>, where the time derivative is taken component-wise.</p>
+<p>The first <strong>important</strong> between the 1D and 3D cases, is the nature of our spring itself. in 1D we assumed the spring has <em>zero rest-length</em> – in other words, it has zero potential energy when the distance between the 1D particle, and the wall to which it is afixed, is zero. This won’t work for 3D shapes since it will cause them to collapse to a point (like a bunny in a blackhole). So we need to define a new potential energy, one which encourages the spring to maintain its original length.</p>
+<p>We are going to define a way to measure the deformation of our spring, relative to its rest, or undeformed, length – such a measure is called a <em>strain</em> measure.</p>
+<p>Lets define <span class="math inline">\(l^0\)</span> to be the original length of of our spring. Then we can build a simple strain measure as <span class="math inline">\(l-l^0\)</span>. This has all the properties we want in an effective strain measure:</p>
+<ol type="1">
+<li>It’s <span class="math inline">\(0\)</span> when the spring has length <span class="math inline">\(l^0\)</span> (rather than being <span class="math inline">\(0\)</span> when <span class="math inline">\(l=0\)</span>)</li>
+<li>It’s invariant to rigid body transformations (i.e the strain isn’t effected by translating or rotating the spring)</li>
+</ol>
+<p>Now in keeping with the variational approach to mechanics, we can use this strain to define a potential energy which we can use to construct our equations of motion.</p>
+<p>Let’s define the potential energrighty for a single spring to be</p>
+<p><span class="math display">\[V = k\left(l-l^0\right)^2,\]</span></p>
+<p>where <span class="math inline">\(k\)</span> is the mechanical stiffness of the spring, like in 1D.</p>
+<p>Let’s express <span class="math inline">\(V\)</span> in terms of <span class="math inline">\(\mathbf{q}\)</span>, which stores the current positions of the end-points of the spring. We are going to do this by introducing some useful matrices that will come in handy later when we need to take derivatives of the potential energy.</p>
+<p>We can compute the vector <span class="math inline">\(\mathbf{dx}\)</span> which points from one end of the spring to the other as</p>
+<p><span class="math display">\[ \mathbf{dx} = \underbrace{\begin{pmatrix}-\mathbf{I} &amp;&amp; \mathbf{I}\end{pmatrix}}_{B}\mathbf{q},\]</span></p>
+<p>so that means the length of the spring can be written as</p>
+<p><span class="math display">\[l=\sqrt{\mathbf{q}^T B^T B \mathbf{q}}\]</span></p>
+<p>Thus <span class="math inline">\(V\left(\mathbf{q}\right) = \frac{1}{2}k\left(\sqrt{\mathbf{q}^T B^T B \mathbf{q}} - l^0\right)^2\)</span> which gives us the potential energy as a function of the generalized coordinates.</p>
+<p>The kinetic energy, <span class="math inline">\(T\)</span> is defined anagously to the 1D case. In 1D, the kinetic energy was <span class="math inline">\(\frac{1}{2}m\dot{\mathbf{q}}^2\)</span> where <span class="math inline">\(\dot{\mathbf{q}}\)</span> was the scalar, 1D velocity. We can interpret this as the magnitude squared of the 1D velocity and thus, a reasonable 3D substitute would be</p>
+<p><span class="math display">\[T\left(\dot{\mathbf{q}}\right)=\frac{1}{2}m\dot{\mathbf{q}}^T\dot{\mathbf{q}}.\]</span></p>
+<p>Because <span class="math inline">\(T\)</span> is only a function of the generalized velocity and <span class="math inline">\(V\)</span> is just a function of the generalized coordinate, you should be able to convince yourself that the equations of motion for a single, 3D spring are</p>
+<p><span class="math display">\[ m\ddot{\mathbf{q}} = \underbrace{-\frac{\partial V\left(\mathbf{q}\right)}{\partial \mathbf{q}}}_{\mbox{Generalized Force}}\]</span></p>
+<p>Now that we’ve seen the basics of how a single spring can be simulated, let’s see what happens when we consider a whole system consisting of many springs!</p>
+<h3 id="mass-spring-systems-in-3d">Mass-Spring Systems in 3D</h3>
+<p>Now let’s consider the case where, instead of one spring and two masses, we have <span class="math inline">\(m\)</span> springs and <span class="math inline">\(n\)</span> particles (like in the case of the tetrahedral mesh representing Terry the bunny).</p>
+<p>Whereas in the previous section our generalized coordinate was <span class="math inline">\(2\times 3\)</span> scalar values for two particles, in the general case, it becomes an <span class="math inline">\(n\times 3\)</span> vector</p>
+<p><span class="math display">\[ \mathbf{q} = \begin{bmatrix} x_0\\y_0\\z_0\\x_1\\y_1\\z_1\\ \vdots \\x_n\\y_n\\z_n\end{bmatrix}.\]</span></p>
+<p>We’ll start with the kinetic energy of a mass-spring system because its the same formula as for a single spring ! However, because it will be convenient later on, we will replace the scalar mass <span class="math inline">\(m\)</span> with an <span class="math inline">\(n\times n\)</span> diagonal matrix <span class="math inline">\(M\)</span> (with the diagonal entries set to <span class="math inline">\(m\)</span>) which gives us the slighly modified kinetic energy</p>
+<p><span class="math display">\[T\left(\dot{\mathbf{q}}\right)=\frac{1}{2}\dot{\mathbf{q}}^T M\dot{\mathbf{q}},\]</span></p>
+<p>where <span class="math inline">\(M\)</span> is called the <em>mass</em> matrix or <em>inertia</em> tensor. We’ll see later in the course that mass matrices can get a lot more complicated than just diagonal.</p>
+<p>It’s really the force computation that get’s effected most by the presence of multiple springs, but its easiest to see this by starting with the potential energy.</p>
+<p>The potential energy of our entire mass spring system, is the sum of the potential energy of all the springs</p>
+<p><span class="math display">\[V\left(\mathbf{q}\right) = \sum_{i=0}^{m-1}V_i\left(\mathbf{q_0},\mathbf{q_1}\right),\]</span></p>
+<p>where <span class="math inline">\(\mathbf{q_0}\)</span> and <span class="math inline">\(\mathbf{q_1}\)</span> are the generalized coordinates (the world space positions) of the two end points of the <span class="math inline">\(i^{th}\)</span> spring.</p>
+<p>To make things a little easier conceptually, we are going to introduce <em>another</em> set of convenience matrices <span class="math inline">\(S_i\)</span>. Each <span class="math inline">\(S_i\)</span> performs the following useful function</p>
+<p><span class="math display">\[ \begin{bmatrix}\mathbf{q}_0\\ \mathbf{q}_1\end{bmatrix} = \mathbf{S}_i \mathbf{q}.\]</span></p>
+<p>An <span class="math inline">\(S_i\)</span> matrix (<span class="math inline">\(6\times n\)</span>) selects, from all the particle positions, the end-point positions of the <span class="math inline">\(i^{th}\)</span> spring. Why is this convenient ? Because we can now rewrite the potential energy of the mass-spring system in terms of <span class="math inline">\(\mathbf{q}\)</span>.</p>
+<p>So we can express the potential energy of the mass-spring system like this</p>
+<p><span class="math display">\[V\left(\mathbf{q}\right) = \sum_{i=0}^{m-1} V_i\left(S_i\mathbf{q}\right),\]</span></p>
+<p>and now we can take derivatives of this in order to compute, say the forces. Let’s see what happens if we compute the gradient of this energy with respect to the generalized coordinates. Then we get</p>
+<p><span class="math display">\[\frac{\partial V\left(\mathbf{q}\right)}{\partial \mathbf{q}} = \sum_{i=0}^{m-1}S_i^T\frac{\partial V_i\left(S_i\mathbf{q}\right)}{\partial \mathbf{q}},\]</span></p>
+<p>and because we know that the energy, in this case, only depends on the end points of the spring (<span class="math inline">\(\mathbf{q_0}\)</span> and <span class="math inline">\(\mathbf{q_1}\)</span>) we can make one final modification:</p>
+<p><span class="math display">\[\frac{\partial V\left(\mathbf{q}\right)}{\partial \mathbf{q}} = \sum_{i=0}^{m-1}S_i^T\frac{\partial V_i\left(\mathbf{q_0},\mathbf{q_1}\right)}{\partial \mathbf{q_0},\mathbf{q_1}}.\]</span></p>
+<p>Let’s unpack this a bit. First, you should be convinced that <span class="math inline">\(\frac{\partial V_i\left(\mathbf{q_0},\mathbf{q_1}\right)}{\partial \mathbf{q_0},\mathbf{q_1}}\)</span> is just computing the potential energy gradient of one spring with respect to its end-points, exactly like what we discussed in the previous section. The only mysterious piece is our <span class="math inline">\(S_i^T\)</span>. That matrix is distributing the local end-point forces into the global force vector, so that they they act on the proper mass particles in the system. This summation and distribution of local forces is called <strong>assembly</strong> because it assembles the global force vector from local contributions. Assembly of local quantities comes up all the time in simulation, in fact we are going to see it used one more time in the next section.</p>
+<p><strong>Implementation Note:</strong> You could implement assembly by mirroring the formula above. In other words, instantiate a sparse <span class="math inline">\(S_i\)</span> matrix for each spring. However that is a waste of space and resources. Instead it’s better to implement the <em>action</em> of <span class="math inline">\(S_i^T\)</span> by indexing directly into the global force vector.</p>
+<h3 id="linearly-implicit-time-integration">Linearly-Implicit Time Integration</h3>
+<p>As we discussed in the previous assignment, making the right choice of time integrator is crucial for the stability, appearance and performance of a simulation. In this assignment we are going to implement one of the most famous time integrators in computer graphics, the <em>Linearly-Impliect Time Integrator</em>. This integrator is not fully-implicit like backward Euler, but it is effocient to compute and reasonably stable, thus it is a good initial place to start when inegrating an elastic system like these mass-springs.</p>
+<p>You should be able to convince yourself that, given the potential and kinetic energies above, that the backward Euler update for a 3D, mass-spring system is</p>
+<p><span class="math display">\[\begin{eqnarray*} M\dot{\mathbf{q}}^{t+1} &amp;=&amp; M\dot{\mathbf{q}}^{t} + \Delta t \mathbf{f}\left(\mathbf{q}^{t+1}\right) \\
+                    \mathbf{q}^{t+1} &amp;=&amp; \mathbf{q}^{t} + \Delta t \dot{\mathbf{q}}^{t+1}
+\end{eqnarray*}.\]</span></p>
+<p>Our big problem is estimating the effect of the forces at <span class="math inline">\(\mathbf{q}^{t+1}\)</span>. Rather than do this fully, the linearly-implicit integrator linearizes the system around the current state via <a href="https://en.wikipedia.org/wiki/Taylor_series">Taylor expansion</a> and uses this approximation to update the velocity.</p>
+<p>We proceed by exploting the fact that <span class="math inline">\(\mathbf{q}^{t+1} = \mathbf{q}^{t} + \Delta t \dot{\mathbf{q}}^{t+1}\)</span> and making the assumption that t is sufficiently small (i.e we try and find a t so that the simulation doesn’t explode). Then we can replace the above update equations with</p>
+<p><span class="math display">\[\begin{eqnarray*} M\dot{\mathbf{q}}^{t+1} &amp;=&amp; M\dot{\mathbf{q}}^{t} + \Delta t \mathbf{f}\left(\mathbf{q}^t\right) + \Delta t^2\underbrace{\frac{\partial \mathbf{f}}{\partial \mathbf{q}}}_{\mbox{K}} \dot{\mathbf{q}}^{t+1} \\
+                    \mathbf{q}^{t+1} &amp;=&amp; \mathbf{q}^{t} + \Delta t \dot{\mathbf{q}}^{t+1}
+\end{eqnarray*}.\]</span></p>
+<p>Importantly we see the appearance of the force gradient, <span class="math inline">\(K\)</span>, called the <em>Stiffness matrix</em> (this will come up again and again :) ) which encodes the change in the forcing behaviour of the object, in a local region around the current state. Because our <em>generalized forces</em> are the negative gradient of the potential energy function, the Stiffness matrix is given by</p>
+<p><span class="math display">\[ K = -\frac{\partial^2 V\left(\mathbf{q}\right)}{\partial \mathbf{q}^2},\]</span></p>
+<p>or <span class="math inline">\(K\)</span> is the negative Hessian of the potential energy. <strong>Warning:</strong> missing negative signs are the number one afflication for otherwise happy physics simulators.</p>
+<p>Ok, let’s do one more rearrangement of these update equations to get them in their final, solveable form:</p>
+<p><span class="math display">\[\begin{eqnarray*} \left(M-\Delta t^2 K\right)\dot{\mathbf{q}}^{t+1} &amp;=&amp; M\dot{\mathbf{q}}^{t} + \Delta t \mathbf{f}\left(\mathbf{q}^t\right) \\
+                    \mathbf{q}^{t+1} &amp;=&amp; \mathbf{q}^{t} + \Delta t \dot{\mathbf{q}}^{t+1}
+\end{eqnarray*}.\]</span></p>
+<p>Now we see where linearly-implicit time integration gets its performance, it requires solving a single, sparse, symmetric linear system. <strong>Note:</strong> A fun game is to convince yourself that <span class="math inline">\(K\)</span> is both sparse (argue from the connectivity of the mass spring system) and symmetric (argue from Newton’s 3rd law).</p>
+<p>In practice, once we have <em>assembled</em> (there’s that word again) <span class="math inline">\(M\)</span> and <span class="math inline">\(K\)</span> we can form <span class="math inline">\(\left(M-\Delta t^2 K\right)\)</span> and solve this linear system using off-the-shelf tools. For this assignment you can use the Simplicial LDLT solver built into the <a href="https://eigen.tuxfamily.org/dox/group__TopicSparseSystems.html">Eigen</a> library.</p>
+<p>Let’s end this section by talking about the assembly of <span class="math inline">\(K\)</span>. In the same way as for the forces, we can directly compute the second derivative of our energy</p>
+<p><span class="math display">\[\frac{\partial^2 V\left(\mathbf{q}\right)}{\partial \mathbf{q}^2} = \sum_{i=0}^{m-1}S_i^T\underbrace{\frac{\partial^2 V_i\left(\mathbf{q_0},\mathbf{q_1}\right)}{\partial \left(\mathbf{q_0},\mathbf{q_1}\right)^2}}_{H_i}S_i.\]</span></p>
+<p>Where <span class="math inline">\(H_i\)</span> is the local spring energy Hessian (so the Hessian of the <span class="math inline">\(i^{th}\)</span> spring energy wrt to its end points).</p>
+<p><strong>WARNING:</strong> to assemble the stiffness matrix replace <span class="math inline">\(H_i\)</span> with <span class="math inline">\(K_i\)</span>, the per-spring stiffness matrix.</p>
+<p>Again, you could implement this using a whole bunch of <span class="math inline">\(S_i\)</span> matrices, but instead its better to implement it via direct indexing. In particular, in Eigen, you can construct a list of <a href="https://eigen.tuxfamily.org/dox/group__TutorialSparse.html"><code>Eigen::Triplet</code></a> objects that can be used to directly initialize a sparse matrix.</p>
+<p><strong>Hint:</strong> a good test for any integrator is to test that your object doesn’t move when no forces are exerted on it.</p>
+<h3 id="fixed-displacement-boundary-conditions">Fixed Displacement Boundary Conditions</h3>
+<p>A Mass-Spring system acting purely under gravity is very boring, it just falls straight down (a rigid motion!). What’s the point of doing all this work of we don’t get a wiggly bunny out of it? In order to generate wiggliness, we need to, at a minimum, fix parts of our object to the environment. These are the <em>boundary conditions</em> for the physics simulation. Because we are fixing the position of particles, these are <em>Dirichlet</em> boundary conditions. There are a few ways to go about this, but we are going to take a projection approach – we will express our generalized coordinates using a smaller set of variables.</p>
+<p>Given that a fixed vertex, by definition, does not move, it makes sense to choose all other vertex positions as our subspace variables. We can now construct a linear subspace which rebuilds all the positions of our particles from this subspace –</p>
+<p><span class="math display">\[ \mathbf{q} = P\hat{\mathbf{q}} + \mathbf{q}_{fixed}.\]</span></p>
+<p>Let’s say we have <span class="math inline">\(l\)</span> fixed vertices. Then <span class="math inline">\(\hat{\mathbf{q}}\)</span> is an <span class="math inline">\(3(n-l)\)</span> length vector which includes the positions of all our non-fixed particles. <span class="math inline">\(\mathbf{q}_{fixed}\)</span> is a <span class="math inline">\(3n\)</span> vector which stores a <span class="math inline">\(0\)</span>’s in the positions of our non-fixed particles and the fixed position of fixed particles. It’s the matrix <span class="math inline">\(P\)</span> that performs the magic of stitching these things together.</p>
+<p><span class="math inline">\(P\)</span> is a bit like the selection matrices, the <span class="math inline">\(S_i\)</span>’s used to explain assembly. It selects out non-fixed vertex positions from <span class="math inline">\(\hat{\mathbf{q}}\)</span> and places them in the correct position in the global <span class="math inline">\(\mathbf{q}\)</span> vector. Fixed positions are then filled in with values from <span class="math inline">\(\mathbf{q}_{fixed}\)</span>. If we take <span class="math inline">\(\hat{\mathbf{q}}\)</span> as the generalized coordinates of our physical system, we will directly encode these fixed boundary conditions into the simulator.</p>
+<p>This is exactly what the assignment 2 simulator does. In practice, it is useful to implement <span class="math inline">\(P\)</span> as a sparse matrix, and you will get the chance to do just that in assignment 2.</p>
+<h3 id="groundrules">Groundrules</h3>
+<p>Implementations of nearly any task you’re asked to implemented in this course can be found online. Do not copy these and avoid googling for code; instead, search the internet for explanations. Many topics have relevant wikipedia articles. Use these as references. Always remember to cite any references in your comments.</p>
+<h3 id="implementation-notes">Implementation Notes</h3>
+<p>For this course most functions will be implemented in <strong>.cpp</strong> files. In this assignment the only exception is that time integrators are implemented in <strong>.h</strong> files. This is due to the use of lambda functions to pass force data to the time integration algorithms.</p>
+<h3 id="srct_particle.cpp">src/T_particle.cpp</h3>
+<p>Compute the kinetic energy of a single mass particle.</p>
+<h3 id="srcv_gravity_particle.cpp">src/V_gravity_particle.cpp</h3>
+<p>Compute the gravitational potental energy of a single mass particle.</p>
+<h3 id="srcv_spring_particle_particle.cpp">src/V_spring_particle_particle.cpp</h3>
+<p>Compute the potential energy of a spring which connects two particles.</p>
+<h3 id="srcdv_gravity_particle_dq.cpp">src/dV_gravity_particle_dq.cpp</h3>
+<p>Compute the gradient of the gravitational potential energy for a single particle.</p>
+<h3 id="srcdv_spring_particle_particle_dq.cpp">src/dV_spring_particle_particle_dq.cpp</h3>
+<p>Compute the forces exerted by a single spring on its end-points.</p>
+<h3 id="srcd2v_spring_particle_particle_dq2.cpp">src/d2V_spring_particle_particle_dq2.cpp</h3>
+<p>Compute the per-spring hessian of the spring potential energy.</p>
+<h3 id="srcmass_matrix_paricles.cpp">src/mass_matrix_paricles.cpp</h3>
+<p>Compute the sparse, diagonal mass matrix that stores the mass of each particle in the mass-spring on its diagonal.</p>
+<h3 id="srcassemble_forces.cpp">src/assemble_forces.cpp</h3>
+<p>Iterate through each spring in the mesh, compute the per-spring forces and assemble the global force vector.</p>
+<h3 id="srcassemble_stiffness.cpp">src/assemble_stiffness.cpp</h3>
+<p>Iterate through each spring in the mesh, compute the per-spring stiffness matrix and assemble the global, sparse stiffness matrix. To do this, you should construct a list of <code>Eigen::Triplet</code> objects and then set your sparse matrix using these <a href="https://eigen.tuxfamily.org/dox/group__TutorialSparse.html">triplets</a>.</p>
+<h3 id="srcfixed_point_constraints.cpp">src/fixed_point_constraints.cpp</h3>
+<p>Compute the sparse projection matrix which projects out fixed point vertices.</p>
+<h3 id="srcpick_nearest_vertices.cpp">src/pick_nearest_vertices.cpp</h3>
+<p>Given a point on the screen (i.e a mouse position clicked by the user), find all vertices within a given radius. <strong>For this method, and this method alone</strong> you are allowed to use the <code>igl::unproject</code> and <code>igl::ray_mesh_intersect</code> functions. I have provided the approriate ray shooting function for you to use in the code as well.</p>
+<h3 id="includelinear_implicit_euler.h">include/linear_implicit_euler.h</h3>
+<p>Implement the linearly implicit Euler time integrator.</p>
+</article>
+</html>
