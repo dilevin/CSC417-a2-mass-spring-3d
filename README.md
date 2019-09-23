@@ -109,6 +109,7 @@ The goal of this assignment is to take what you've learned about 1D mass-spring 
 2. the notion of assembly. Assembly is a process which builds global linear algebra operations describing the motion of a whole object (bunny) from smaller operators describing the behaviour of individual pieces (in this case springs). 
 3. The linearly implicit time integrator in 3D -- arguably the most popular time integration scheme in computer graphics.
 
+![Poking and prodding Terry the Bunny](images/a2_results.gif)
 
 **Github does not render the math in this Markdown. Please look at README.html to see the equations in their proper form**
 
