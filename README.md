@@ -77,7 +77,7 @@ If you are using Mac or Linux, then issue:
 
     make
 
-## Compliation for Testing
+## Compilation for Testing
 
 Compiling the code in the above manner will yield working, but very slow executables. To run the code at full speed, you should compile it in release mode. Starting in the **build directory**, do the following:
 
@@ -87,7 +87,7 @@ Followed by:
 
     make 
   
-Your code should now run signfigantly (sometimes as much as ten times) faster. 
+Your code should now run significantly (sometimes as much as ten times) faster. 
 
 If you are using Windows, then running `cmake ..` should have created a Visual Studio solution file
 called `a1-mass-spring-1d.sln` that you can open and build from there. Building the project will generate an .exe file.
@@ -101,6 +101,7 @@ Once built, you can execute the assignment from inside the `build/` using
     ./a2-mass-spring-3d
 
 ## Background
+
 Its happening! We are finally doing some computer graphics ! You can tell because this assignment has a bunny in it (their name is Terry). 
 
 The goal of this assignment is to take what you've learned about 1D mass-spring systems and move it to 3D. While much of what we previously covered on variational mechanics and time integration still applies, you will soon see that implementations in 3D become much more complicated. Crucially, this assignment will tackle three concepts which will be important for the remainder of the course 
@@ -114,26 +115,27 @@ The goal of this assignment is to take what you've learned about 1D mass-spring 
 **Github does not render the math in this Markdown. Please look at README.html to see the equations in their proper form**
 
 ### A Spring and Two Masses in 3D
-The [previous assignment](https://github.com/dilevin/CSC2549-a1-mass-spring-1d) had you  implement a simple simulation of a coupled mass and spring in one-dimension. In this assignment we are going to level that up to three dimensions. Specifically, the asignment 2 code reads in a a 3D *tetrahedral* mesh (created using [TetWild](https://github.com/Yixin-Hu/TetWild)) and interprets all the edges of this tetrahedral mesh as springs.  The user (you!!) will be able to poke and prod this bunny by clicking on vertices, in order to elicit, springy wobbly motion.   
+
+The [previous assignment](https://github.com/dilevin/CSC2549-a1-mass-spring-1d) had you implement a simple simulation of a coupled mass and spring in one-dimension. In this assignment we are going to level that up to three dimensions. Specifically, the assignment 2 code reads in a a 3D *tetrahedral* mesh (created using [TetWild](https://github.com/Yixin-Hu/TetWild)) and interprets all the edges of this tetrahedral mesh as springs.  The user (you!!) will be able to poke and prod this bunny by clicking on vertices, in order to elicit, springy wobbly motion.   
   
-In 1D, we used the one-dimensional position of the mass particle as our generalized coordinate. In 3D we will use the obvious extension, which is that the genearlized coordinate of each mass particle will be its 3D position. For the simple case of a spring connecting two masses we will define the $6\times 1$ vector
+In 1D, we used the one-dimensional position of the mass particle as our generalized coordinate. In 3D we will use the obvious extension, which is that the generalized coordinate of each mass particle will be its 3D position. For the simple case of a spring connecting two masses we will define the $6\times 1$ vector
 
 $$ \mathbf{q} = \begin{bmatrix} x_0\\y_0\\z_0\\x_1\\y_1\\z_1 \end{bmatrix},$$
 
-where subscripts are used to denote the particle each variable is associated with. Analagous with the 1D case, $\dot{\mathbf{q}} = \frac{d\mathbf{q}}{dt}$, where the time derivative is taken component-wise. 
+where subscripts are used to denote the particle each variable is associated with. Analogous with the 1D case, $\dot{\mathbf{q}} = \frac{d\mathbf{q}}{dt}$, where the time derivative is taken component-wise. 
 
-The first **important** between the 1D and 3D cases, is the nature of our spring itself. in 1D we assumed the spring has *zero rest-length* -- in other words, it has zero potential energy when the distance between the 1D particle, and the wall to which it is afixed, is zero. This won't work for 3D shapes since it will cause them to collapse to a point (like a bunny in a blackhole). So we need to define a new potential energy, one which encourages the spring to maintain its original length. 
+The first **important** difference between the 1D and 3D cases, is the nature of our spring itself. in 1D we assumed the spring has *zero rest-length* -- in other words, it has zero potential energy when the distance between the 1D particle, and the wall to which it is affixed, is zero. This won't work for 3D shapes since it will cause them to collapse to a point (like a bunny in a blackhole). So we need to define a new potential energy, one which encourages the spring to maintain its original length. 
 
 We are going to define a way to measure the deformation of our spring, relative to its rest, or undeformed, length -- such a measure is called a *strain* measure.
 
-Lets define $l^0$ to be the original length of of our spring. Then we can build a simple strain measure as $l-l^0$. This has all the properties we want in an effective strain measure:
+Lets define $l^0$ to be the original length of of our spring. Then we can define a simple strain measure as $l-l^0$. This has all the properties we want in an effective strain measure:
 
-1. It's $0$ when the spring has length $l^0$ (rather than being $0$ when $l=0$)
+1. It's $0$ when the spring has length $l^0$ (rather than being $0$ when length is $0$)
 2. It's invariant to rigid body transformations (i.e the strain isn't effected by translating or rotating the spring)
 
 Now in keeping with the variational approach to mechanics, we can use this strain to define a potential energy which we can use to construct our equations of motion.
 
-Let's define the potential energrighty for a single spring to be
+Let's define the potential energy for a single spring to be
 
 $$V = k\left(l-l^0\right)^2,$$
 
@@ -151,7 +153,7 @@ $$l=\sqrt{\mathbf{q}^T B^T B \mathbf{q}}$$
 
 Thus $V\left(\mathbf{q}\right) = \frac{1}{2}k\left(\sqrt{\mathbf{q}^T B^T B \mathbf{q}} - l^0\right)^2$ which gives us the potential energy as a function of the generalized coordinates.
 
-The kinetic energy, $T$ is defined anagously to the 1D case. In 1D, the kinetic energy was  $\frac{1}{2}m\dot{\mathbf{q}}^2$ where $\dot{\mathbf{q}}$ was the scalar, 1D velocity. We can interpret this as the magnitude squared of the 1D velocity and thus, a reasonable 3D substitute would be 
+The kinetic energy, $T$ is defined analogously to the 1D case. In 1D, the kinetic energy was  $\frac{1}{2}m\dot{\mathbf{q}}^2$ where $\dot{\mathbf{q}}$ was the scalar, 1D velocity. We can interpret this as the magnitude squared of the 1D velocity and thus, a reasonable 3D substitute would be 
 
 $$T\left(\dot{\mathbf{q}}\right)=\frac{1}{2}m\dot{\mathbf{q}}^T\dot{\mathbf{q}}.$$
 
@@ -163,19 +165,19 @@ Now that we've seen the basics of how a single spring can be simulated, let's se
 
 ### Mass-Spring Systems  in 3D
 
-Now let's consider the case where, instead of one spring and two masses, we have $m$ springs and $n$ particles (like in the case of the tetrahedral mesh representing Terry the bunny).
+Now let's consider the case where we have $m$ springs and $n$ particles (like in the case of the tetrahedral mesh representing Terry the bunny).
 
-Whereas in the previous section our generalized coordinate was $2\times 3$ scalar values for two particles, in the general case, it becomes an $n\times 3$ vector
+Whereas in the previous section, our generalized coordinate was $2\times 3$ scalar values for two particles, in the general case, it becomes an $n\times 3$ vector
 
 $$ \mathbf{q} = \begin{bmatrix} x_0\\y_0\\z_0\\x_1\\y_1\\z_1\\ \vdots \\x_n\\y_n\\z_n\end{bmatrix}.$$
 
-We'll start with the kinetic energy of a mass-spring system because its the same formula as for a single spring ! However, because it will be convenient later on, we will replace the scalar mass $m$ with an $n\times n$ diagonal matrix $M$ (with the diagonal entries set to $m$) which gives us the slighly modified kinetic energy
+We'll start with the kinetic energy of a mass-spring system because its the same formula as for a single spring ! However, because it will be convenient later on, we will replace the scalar mass $m$ with an $n\times n$ diagonal matrix $M$ (with the diagonal entries set to $m$) which gives us the slightly modified kinetic energy
 
 $$T\left(\dot{\mathbf{q}}\right)=\frac{1}{2}\dot{\mathbf{q}}^T M\dot{\mathbf{q}},$$
 
 where $M$ is called the *mass* matrix or *inertia* tensor. We'll see later in the course that mass matrices can get a lot more complicated than just diagonal. 
 
-It's really the force computation that get's effected most by the presence of multiple springs, but its easiest to see this by starting with the potential energy. 
+It's really the force computation that gets effected most by the presence of multiple springs, but its easiest to see this by starting with the potential energy. 
 
 The potential energy of our entire mass spring system, is the sum of the potential energy of all the springs
 
@@ -207,7 +209,7 @@ Let's unpack this a bit. First, you should be convinced that $\frac{\partial V_i
 
 ### Linearly-Implicit Time Integration
 
-As we discussed in the previous assignment, making the right choice of time integrator is crucial for the stability, appearance and performance of a simulation. In this assignment we are going to implement one of the most famous time integrators in computer graphics, the *Linearly-Impliect Time Integrator*. This integrator is not fully-implicit like backward Euler, but it is effocient to compute and reasonably stable, thus it is a good initial place to start when inegrating an elastic system like these mass-springs. 
+As we discussed in the previous assignment, making the right choice of time integrator is crucial for the stability, appearance and performance of a simulation. In this assignment we are going to implement one of the most famous time integrators in computer graphics, the *Linearly-Implicit Time Integrator*. This integrator is not fully-implicit like backward Euler, but it is efficient to compute and reasonably stable, thus it is a good initial place to start when integrating an elastic system like these mass-springs. 
 
 You should be able to convince yourself that, given the potential and kinetic energies above, that the backward Euler update for a 3D, mass-spring system is
 
@@ -217,7 +219,7 @@ $$\begin{eqnarray*} M\dot{\mathbf{q}}^{t+1} &=& M\dot{\mathbf{q}}^{t} + \Delta t
 
 Our big problem is estimating the effect of the forces at $\mathbf{q}^{t+1}$. Rather than do this fully, the linearly-implicit integrator linearizes the system around the current state via [Taylor expansion](https://en.wikipedia.org/wiki/Taylor_series) and uses this approximation to update the velocity. 
 
-We proceed by exploting the fact that $\mathbf{q}^{t+1} = \mathbf{q}^{t} + \Delta t \dot{\mathbf{q}}^{t+1}$ and making the assumption that \Delta t is sufficiently small (i.e we try and find a \Delta t so that the simulation doesn't explode). Then we can replace the above update equations with
+We proceed by exploiting the fact that $\mathbf{q}^{t+1} = \mathbf{q}^{t} + \Delta t \dot{\mathbf{q}}^{t+1}$ and making the assumption that \Delta t is sufficiently small (i.e we try and find a \Delta t so that the simulation doesn't explode). Then we can replace the above update equations with
 
 $$\begin{eqnarray*} M\dot{\mathbf{q}}^{t+1} &=& M\dot{\mathbf{q}}^{t} + \Delta t \mathbf{f}\left(\mathbf{q}^t\right) + \Delta t^2\underbrace{\frac{\partial \mathbf{f}}{\partial \mathbf{q}}}_{\mbox{K}} \dot{\mathbf{q}}^{t+1} \\
                     \mathbf{q}^{t+1} &=& \mathbf{q}^{t} + \Delta t \dot{\mathbf{q}}^{t+1}
@@ -227,9 +229,9 @@ Importantly we see the appearance of the force gradient, $K$, called the *Stiffn
 
 $$ K = -\frac{\partial^2 V\left(\mathbf{q}\right)}{\partial \mathbf{q}^2},$$
 
-or $K$ is the negative Hessian of the potential energy. **Warning:** missing negative signs are the number one afflication for otherwise happy physics simulators. 
+or $K$ is the negative Hessian of the potential energy. **Warning:** missing negative signs are the number one affliction for otherwise happy physics simulators. 
 
-Ok, let's do one more rearrangement of these update equations to get them in their final, solveable form:
+Ok, let's do one more rearrangement of these update equations to get them in their final, solvable form:
 
 $$\begin{eqnarray*} \left(M-\Delta t^2 K\right)\dot{\mathbf{q}}^{t+1} &=& M\dot{\mathbf{q}}^{t} + \Delta t \mathbf{f}\left(\mathbf{q}^t\right) \\
                     \mathbf{q}^{t+1} &=& \mathbf{q}^{t} + \Delta t \dot{\mathbf{q}}^{t+1}
@@ -315,7 +317,7 @@ Compute the sparse projection matrix which projects out fixed point vertices.
 
 ### src/pick_nearest_vertices.cpp
 
-Given a point on the screen (i.e a mouse position clicked by the user), find all vertices within a given radius. **For this method, and this method alone** you are allowed to use the ``igl::unproject`` and ``igl::ray_mesh_intersect`` functions. I have provided the approriate ray shooting function for you to use in the code as well. 
+Given a point on the screen (i.e a mouse position clicked by the user), find all vertices within a given radius. **For this method, and this method alone** you are allowed to use the ``igl::unproject`` and ``igl::ray_mesh_intersect`` functions. I have provided the appropriate ray shooting function for you to use in the code as well. 
 
 ### include/linear_implicit_euler.h
 
