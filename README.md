@@ -137,7 +137,7 @@ Now in keeping with the variational approach to mechanics, we can use this strai
 
 Let's define the potential energy for a single spring to be
 
-$$V = k\left(l-l^0\right)^2,$$
+$$V = \frac{1}{2}k\left(l-l^0\right)^2,$$
 
 where $k$ is the mechanical stiffness of the spring, like in 1D.
 
