@@ -6,10 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>README</title>
   <link rel="stylesheet" href="css/github-markdown.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
   <style>
     .markdown-body {
         box-sizing: border-box;
@@ -24,9 +20,13 @@
             padding: 15px;
         }
     }
-</style>
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
 </head>
-<article class="markdown-body">
+<article class = "markdown-body">
 <h1 id="physics-based-animation-mass-spring-systems-on-three-dimensions">Physics-Based Animation – Mass-Spring Systems on Three Dimensions</h1>
 <blockquote>
 <p><strong>To get started:</strong> Clone this repository and all its <a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules">submodule</a> dependencies using:</p>
@@ -34,7 +34,7 @@
 </blockquote>
 <p><strong>Do not fork:</strong> Clicking “Fork” will create a <em>public</em> repository. If you’d like to use GitHub while you work on your assignment, then mirror this repo as a new <em>private</em> repository: https://stackoverflow.com/questions/10065526/github-how-to-make-a-fork-of-public-repository-private</p>
 <h2 id="introduction">Introduction</h2>
-<p>Welcome to Physics-Based Animation. This assignment has two purposes, (1) to familiarize you with the development tools used for assignments in the course and (2) to introduce you to some basic physics simulation concepts in one-dimension (1D).</p>
+<p>The second assignment has two purposes is really where we start doing Computer Graphics. The main focus will be on pushing the ideas we explored in 1D (the previous assignment) to larger scale examples (bunnies!) in 3D.</p>
 <h3 id="prerequisite-installation">Prerequisite installation</h3>
 <p>On all platforms, we will assume you have installed cmake and a modern c++ compiler on Mac OS X<a href="#¹macusers">¹</a>, Linux<a href="#²linuxusers">²</a>, or Windows<a href="#³windowsusers">³</a>.</p>
 <p>We also assume that you have cloned this repository using the <code>--recursive</code> flag (if not then issue <code>git submodule update --init --recursive</code>).</p>
@@ -75,7 +75,7 @@ cmake ..</code></pre>
 <p>Followed by:</p>
 <pre><code>make </code></pre>
 <p>Your code should now run significantly (sometimes as much as ten times) faster.</p>
-<p>If you are using Windows, then running <code>cmake ..</code> should have created a Visual Studio solution file called <code>a1-mass-spring-1d.sln</code> that you can open and build from there. Building the project will generate an .exe file.</p>
+<p>If you are using Windows, then running <code>cmake ..</code> should have created a Visual Studio solution file called <code>a2-mass-spring-3d.sln</code> that you can open and build from there. Building the project will generate an .exe file.</p>
 <p>Why don’t you try this right now?</p>
 <h2 id="execution">Execution</h2>
 <p>Once built, you can execute the assignment from inside the <code>build/</code> using</p>
@@ -107,7 +107,7 @@ cmake ..</code></pre>
 </ol>
 <p>Now in keeping with the variational approach to mechanics, we can use this strain to define a potential energy which we can use to construct our equations of motion.</p>
 <p>Let’s define the potential energy for a single spring to be</p>
-<p><span class="math display">\[V = k\left(l-l^0\right)^2,\]</span></p>
+<p><span class="math display">\[V = \frac{1}{2}k\left(l-l^0\right)^2,\]</span></p>
 <p>where <span class="math inline">\(k\)</span> is the mechanical stiffness of the spring, like in 1D.</p>
 <p>Let’s express <span class="math inline">\(V\)</span> in terms of <span class="math inline">\(\mathbf{q}\)</span>, which stores the current positions of the end-points of the spring. We are going to do this by introducing some useful matrices that will come in handy later when we need to take derivatives of the potential energy.</p>
 <p>We can compute the vector <span class="math inline">\(\mathbf{dx}\)</span> which points from one end of the spring to the other as</p>
