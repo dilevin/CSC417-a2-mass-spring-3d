@@ -259,7 +259,7 @@ A Mass-Spring system acting purely under gravity is very boring, it just falls s
 
 Given that a fixed vertex, by definition, does not move, it makes sense to choose all other vertex positions as our subspace variables. We can now construct a linear subspace which rebuilds all the positions of our particles from this subspace --
 
-$$ \mathbf{q} = P\hat{\mathbf{q}} + \mathbf{q}_{fixed}.$$
+$$ \mathbf{q} = P^T\hat{\mathbf{q}} + \mathbf{q}_{fixed}.$$
 
 Let's say we have $l$ fixed vertices. Then $\hat{\mathbf{q}}$ is an $3(n-l)$ length vector which includes the positions of all our non-fixed particles. $\mathbf{q}_{fixed}$ is a $3n$ vector which stores a $0$'s in the positions of our non-fixed particles and the fixed position of fixed particles. It's the matrix $P$ that performs the magic of stitching these things together. 
 
