@@ -6,6 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <title>README</title>
   <link rel="stylesheet" href="css/github-markdown.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
   <style>
     .markdown-body {
         box-sizing: border-box;
@@ -20,13 +24,9 @@
             padding: 15px;
         }
     }
-  </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-AMS_CHTML-full" type="text/javascript"></script>
-  <!--[if lt IE 9]>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-  <![endif]-->
+</style>
 </head>
-<article class = "markdown-body">
+<article class="markdown-body">
 <h1 id="physics-based-animation-mass-spring-systems-on-three-dimensions">Physics-Based Animation – Mass-Spring Systems on Three Dimensions</h1>
 <blockquote>
 <p><strong>To get started:</strong> Clone this repository and all its <a href="https://git-scm.com/book/en/v2/Git-Tools-Submodules">submodule</a> dependencies using:</p>
@@ -171,7 +171,7 @@ cmake ..</code></pre>
 <h3 id="fixed-displacement-boundary-conditions">Fixed Displacement Boundary Conditions</h3>
 <p>A Mass-Spring system acting purely under gravity is very boring, it just falls straight down (a rigid motion!). What’s the point of doing all this work of we don’t get a wiggly bunny out of it? In order to generate wiggliness, we need to, at a minimum, fix parts of our object to the environment. These are the <em>boundary conditions</em> for the physics simulation. Because we are fixing the position of particles, these are <em>Dirichlet</em> boundary conditions. There are a few ways to go about this, but we are going to take a projection approach – we will express our generalized coordinates using a smaller set of variables.</p>
 <p>Given that a fixed vertex, by definition, does not move, it makes sense to choose all other vertex positions as our subspace variables. We can now construct a linear subspace which rebuilds all the positions of our particles from this subspace –</p>
-<p><span class="math display">\[ \mathbf{q} = P\hat{\mathbf{q}} + \mathbf{q}_{fixed}.\]</span></p>
+<p><span class="math display">\[ \mathbf{q} = P^T\hat{\mathbf{q}} + \mathbf{q}_{fixed}.\]</span></p>
 <p>Let’s say we have <span class="math inline">\(l\)</span> fixed vertices. Then <span class="math inline">\(\hat{\mathbf{q}}\)</span> is an <span class="math inline">\(3(n-l)\)</span> length vector which includes the positions of all our non-fixed particles. <span class="math inline">\(\mathbf{q}_{fixed}\)</span> is a <span class="math inline">\(3n\)</span> vector which stores a <span class="math inline">\(0\)</span>’s in the positions of our non-fixed particles and the fixed position of fixed particles. It’s the matrix <span class="math inline">\(P\)</span> that performs the magic of stitching these things together.</p>
 <p><span class="math inline">\(P\)</span> is a bit like the selection matrices, the <span class="math inline">\(S_i\)</span>’s used to explain assembly. It selects out non-fixed vertex positions from <span class="math inline">\(\hat{\mathbf{q}}\)</span> and places them in the correct position in the global <span class="math inline">\(\mathbf{q}\)</span> vector. Fixed positions are then filled in with values from <span class="math inline">\(\mathbf{q}_{fixed}\)</span>. If we take <span class="math inline">\(\hat{\mathbf{q}}\)</span> as the generalized coordinates of our physical system, we will directly encode these fixed boundary conditions into the simulator.</p>
 <p>This is exactly what the assignment 2 simulator does. In practice, it is useful to implement <span class="math inline">\(P\)</span> as a sparse matrix, and you will get the chance to do just that in assignment 2.</p>
