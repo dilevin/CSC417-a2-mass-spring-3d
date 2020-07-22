@@ -1,4 +1,4 @@
-name: C/I Build CSC2549 A2
+name: Build CSC2549 A2
 
 on:
   push:
