@@ -1,0 +1,64 @@
+name: C/I Build CSC2549 A2
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  # Linux / macOS
+  Unix:
+
+    name: ${{ matrix.name }} (${{ matrix.config }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        config: [Release]
+        include:
+          - os: macos-latest
+            name: macOS
+          - os: ubuntu-latest
+            name: Linux
+
+    env:
+      OMP_NUM_THREADS: 1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 10
+
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+
+      - name: Dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+            sudo apt-get install \
+            build-essential \
+            cmake \
+            mesa-common-dev libgl1-mesa-dev libglu1-mesa-dev \
+            xorg-dev \
+            libx11-dev \
+            libxinerama1 libxinerama-dev \
+            libxcursor-dev libxrandr-dev libxi-dev libxmu-dev \
+      # need to try assignment 5 and 6 on Ubuntu with GUI
+
+      #- name: Dependencies (macOS)
+      #  if: runner.os == 'macOS'
+      #  run: brew install cmake # need to add corresponding libraries
+
+      - name: Configure
+        run: |
+          mkdir -p build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+
+      - name: Build
+        run: |
+          cd build
+          make
