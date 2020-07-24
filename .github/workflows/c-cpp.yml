@@ -1,4 +1,4 @@
-name: Build CSC2549 A2
+name: Build-CSC2549-Assignment-Two
 
 on:
   push:
@@ -47,11 +47,13 @@ jobs:
             libx11-dev \
             libxinerama1 libxinerama-dev \
             libxcursor-dev libxrandr-dev libxi-dev libxmu-dev \
-      # need to try assignment 5 and 6 on Ubuntu with GUI
 
-      #- name: Dependencies (macOS)
-      #  if: runner.os == 'macOS'
-      #  run: brew install cmake # need to add corresponding libraries
+      - name: Dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew update
+          brew info git || brew install git
+          brew info cmake || brew install cmake
 
       - name: Configure
         run: |
@@ -63,3 +65,32 @@ jobs:
         run: |
           cd build
           make
+
+  # Windows
+  Windows:
+    runs-on: windows-latest
+    env:
+      CC: cl.exe
+      CXX: cl.exe
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [Release]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 10
+
+      - name: Checkout submodules
+        run: git submodule update --init --recursive
+
+      - name: Configure and build
+        shell: cmd
+        run: |
+          call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\Common7\Tools\VsDevCmd.bat" -arch=x64
+          cmake -G Ninja ^
+            -DCMAKE_BUILD_TYPE=${{ matrix.config }} ^
+            -B build ^
+            -S .
+          cmake --build build

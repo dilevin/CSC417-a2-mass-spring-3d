@@ -1,5 +1,5 @@
 # Physics-Based Animation – Mass-Spring Systems on Three Dimensions
-[![](https://github.com/dilevin/CSC2549-a2-mass-spring-3d/workflows/Build%20CSC2549%20A2/badge.svg)](https://github.com/dilevin/CSC2549-a2-mass-spring-3d/actions)
+[![](https://github.com/dilevin/CSC2549-a2-mass-spring-3d/workflows/Build-CSC2549-Assignment-Two/badge.svg)](https://github.com/dilevin/CSC2549-a2-mass-spring-3d/actions)
 
 > **To get started:** Clone this repository and all its [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) dependencies using:
 > 
