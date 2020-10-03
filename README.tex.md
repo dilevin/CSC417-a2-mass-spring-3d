@@ -299,7 +299,7 @@ Compute the forces exerted by a single spring on its end-points.
 
 Compute the per-spring hessian of the spring potential energy. 
 
-### src/mass_matrix_paricles.cpp
+### src/mass_matrix_particles.cpp
 
 Compute the sparse, diagonal mass matrix that stores the mass of each particle in the mass-spring on its diagonal.
 
@@ -319,7 +319,7 @@ Compute the sparse projection matrix which projects out fixed point vertices.
 
 Given a point on the screen (i.e a mouse position clicked by the user), find all vertices within a given radius. **For this method, and this method alone** you are allowed to use the ``igl::unproject`` and ``igl::ray_mesh_intersect`` functions. I have provided the appropriate ray shooting function for you to use in the code as well. 
 
-### include/linear_implicit_euler.h
+### include/linearly_implicit_euler.h
 
 Implement the linearly implicit Euler time integrator. 
 
