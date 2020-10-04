@@ -3,7 +3,7 @@
 
 > **To get started:** Clone this repository and all its [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules) dependencies using:
 > 
->     git clone --recursive https://github.com/dilevin/CSC2549-a2-mass-spring-3d.git
+>     git clone --recursive https://github.com/dilevin/CSC417-a2-mass-spring-3d.git
 
 **Do not fork:** Clicking "Fork" will create a _public_ repository. If you'd like to use GitHub while you work on your assignment, then mirror this repo as a new _private_ repository: https://stackoverflow.com/questions/10065526/github-how-to-make-a-fork-of-public-repository-private
 
@@ -117,7 +117,7 @@ The goal of this assignment is to take what you've learned about 1D mass-spring 
 
 ### A Spring and Two Masses in 3D
 
-The [previous assignment](https://github.com/dilevin/CSC2549-a1-mass-spring-1d) had you implement a simple simulation of a coupled mass and spring in one-dimension. In this assignment we are going to level that up to three dimensions. Specifically, the assignment 2 code reads in a a 3D *tetrahedral* mesh (created using [TetWild](https://github.com/Yixin-Hu/TetWild)) and interprets all the edges of this tetrahedral mesh as springs.  The user (you!!) will be able to poke and prod this bunny by clicking on vertices, in order to elicit, springy wobbly motion.   
+The [previous assignment](https://github.com/dilevin/CSC417-a1-mass-spring-1d) had you implement a simple simulation of a coupled mass and spring in one-dimension. In this assignment we are going to level that up to three dimensions. Specifically, the assignment 2 code reads in a a 3D *tetrahedral* mesh (created using [TetWild](https://github.com/Yixin-Hu/TetWild)) and interprets all the edges of this tetrahedral mesh as springs.  The user (you!!) will be able to poke and prod this bunny by clicking on vertices, in order to elicit, springy wobbly motion.   
   
 In 1D, we used the one-dimensional position of the mass particle as our generalized coordinate. In 3D we will use the obvious extension, which is that the generalized coordinate of each mass particle will be its 3D position. For the simple case of a spring connecting two masses we will define the <img src="/tex/9d4aa2a49ae05f1b2e473e729fcbf6b4.svg?invert_in_darkmode&sanitize=true" align=middle width=36.52961069999999pt height=21.18721440000001pt/> vector
 
