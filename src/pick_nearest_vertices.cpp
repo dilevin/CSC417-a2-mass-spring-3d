@@ -12,11 +12,16 @@ bool pick_nearest_vertices(std::vector<unsigned int> &verts, Eigen::Ref<const Ei
 
     // Source, destination and direction in world
     Eigen::Vector3f start,dir;
+    Eigen::Vector3f win_0(win(0), win(1), win(2));
+    Eigen::Vector3f win_1(win(0), win(1), 1.);
+
+
+    igl::unproject(win_0,view,proj,viewport,start);
+    igl::unproject(win_1,view,proj,viewport,dir);
+    dir -= start; 
+
     igl::Hit hit;
 
-    //compute start and direction in the world to check for picked vertex
-    //YOUR CODE HERE
-    
     const auto & shoot_ray = [&V,&F](const Eigen::Vector3f& s, const Eigen::Vector3f& dir, igl::Hit & hit)->bool
     {
         std::vector<igl::Hit> hits;
@@ -34,8 +39,20 @@ bool pick_nearest_vertices(std::vector<unsigned int> &verts, Eigen::Ref<const Ei
         return false;
     }
 
-    //check if any of the hit vertices are within the selection radius 
-    //YOUR CODE HERE
+    Eigen::Vector3f bc;
+    bc << 1.0-hit.u-hit.v, hit.u, hit.v;
+    unsigned int fid = hit.id;
+  
+    long c;
+    bc.maxCoeff(&c);
+    unsigned int vid = F(fid,c);
+
+    for(unsigned int qi = 0; qi < V.rows(); qi++) {
+        if((V.row(qi) - V.row(vid)).norm() < radius) {
+            
+            verts.push_back(qi);
+        }
+    }
 
     return (verts.size() == 0 ? false : true);
 }
