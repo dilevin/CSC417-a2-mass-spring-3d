@@ -169,7 +169,7 @@ Now let's consider the case where we have $m$ springs and $n$ particles (like in
 
 Whereas in the previous section, our generalized coordinate was $2\times 3$ scalar values for two particles, in the general case, it becomes an $n\times 3$ vector
 
-$$ \mathbf{q} = \begin{bmatrix} x_0\\y_0\\z_0\\x_1\\y_1\\z_1\\ \vdots \\x_n\\y_n\\z_n\end{bmatrix}.$$
+$$\mathbf{q} = \begin{bmatrix} x_0\\y_0\\z_0\\x_1\\y_1\\z_1\\ \vdots \\x_n\\y_n\\z_n\end{bmatrix}.$$
 
 We'll start with the kinetic energy of a mass-spring system because its the same formula as for a single spring ! However, because it will be convenient later on, we will replace the scalar mass $m$ with an $n\times n$ diagonal matrix $M$ (with the diagonal entries set to $m$) which gives us the slightly modified kinetic energy
 
@@ -213,17 +213,18 @@ As we discussed in the previous assignment, making the right choice of time inte
 
 You should be able to convince yourself that, given the potential and kinetic energies above, that the backward Euler update for a 3D, mass-spring system is
 
-$$\begin{eqnarray*} M\dot{\mathbf{q}}^{t+1} &=& M\dot{\mathbf{q}}^{t} + \Delta t \mathbf{f}\left(\mathbf{q}^{t+1}\right) \\
-                    \mathbf{q}^{t+1} &=& \mathbf{q}^{t} + \Delta t \dot{\mathbf{q}}^{t+1}
-\end{eqnarray*}.$$
+\begin{align} 
+M\dot{\mathbf{q}}^{t+1} & =  M\dot{\mathbf{q}}^{t} + \Delta t \mathbf{f}\left(\mathbf{q}^{t+1}\right)\\
+        \mathbf{q}^{t+1} & =  \mathbf{q}^{t} + \Delta t \dot{\mathbf{q}}^{t+1}
+\end{align}.
 
 Our big problem is estimating the effect of the forces at $\mathbf{q}^{t+1}$. Rather than do this fully, the linearly-implicit integrator linearizes the system around the current state via [Taylor expansion](https://en.wikipedia.org/wiki/Taylor_series) and uses this approximation to update the velocity. 
 
 We proceed by exploiting the fact that $\mathbf{q}^{t+1} = \mathbf{q}^{t} + \Delta t \dot{\mathbf{q}}^{t+1}$ and making the assumption that \Delta t is sufficiently small (i.e we try and find a \Delta t so that the simulation doesn't explode). Then we can replace the above update equations with
 
-$$\begin{eqnarray*} M\dot{\mathbf{q}}^{t+1} &=& M\dot{\mathbf{q}}^{t} + \Delta t \mathbf{f}\left(\mathbf{q}^t\right) + \Delta t^2\underbrace{\frac{\partial \mathbf{f}}{\partial \mathbf{q}}}_{\mbox{K}} \dot{\mathbf{q}}^{t+1} \\
-                    \mathbf{q}^{t+1} &=& \mathbf{q}^{t} + \Delta t \dot{\mathbf{q}}^{t+1}
-\end{eqnarray*}.$$
+\begin{align} M\dot{\mathbf{q}}^{t+1} &= M\dot{\mathbf{q}}^{t} + \Delta t \mathbf{f}\left(\mathbf{q}^t\right) + \Delta t^2\underbrace{\frac{\partial \mathbf{f}}{\partial \mathbf{q}}}_{\mbox{K}} \dot{\mathbf{q}}^{t+1} \\
+\mathbf{q}^{t+1} &= \mathbf{q}^{t} + \Delta t \dot{\mathbf{q}}^{t+1}
+\end{align}.
 
 Importantly we see the appearance of the force gradient, $K$, called the *Stiffness matrix* (this will come up again and again :) ) which encodes the change in the forcing behaviour of the object, in a local region around the current state. Because our *generalized forces* are the negative gradient of the potential energy function, the Stiffness matrix is given by
 
@@ -233,9 +234,9 @@ or $K$ is the negative Hessian of the potential energy. **Warning:** missing neg
 
 Ok, let's do one more rearrangement of these update equations to get them in their final, solvable form:
 
-$$\begin{eqnarray*} \left(M-\Delta t^2 K\right)\dot{\mathbf{q}}^{t+1} &=& M\dot{\mathbf{q}}^{t} + \Delta t \mathbf{f}\left(\mathbf{q}^t\right) \\
-                    \mathbf{q}^{t+1} &=& \mathbf{q}^{t} + \Delta t \dot{\mathbf{q}}^{t+1}
-\end{eqnarray*}.$$
+\begin{align} \left(M-\Delta t^2 K\right)\dot{\mathbf{q}}^{t+1} &= M\dot{\mathbf{q}}^{t} + \Delta t \mathbf{f}\left(\mathbf{q}^t\right) \\
+\mathbf{q}^{t+1} &= \mathbf{q}^{t} + \Delta t \dot{\mathbf{q}}^{t+1}
+\end{align}.
 
 Now we see where linearly-implicit time integration gets its performance, it requires solving a single, sparse, symmetric linear system. **Note:** A fun game is to convince yourself that $K$ is both sparse (argue from the connectivity of the mass spring system) and symmetric (argue from Newton's 3rd law).  
 
